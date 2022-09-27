@@ -4,8 +4,12 @@
   "description": "Chat App",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Nataliia Ishchenko",
-  "license": "ISC"
+  "license": "ISC",
+  "workspaces": [
+    "./packages/*",
+    "packeges/backend"
+  ]
 }
