@@ -9,7 +9,9 @@
   "author": "Nataliia Ishchenko",
   "license": "ISC",
   "workspaces": [
-    "./packages/*",
-    "packeges/backend"
-  ]
+    "./packages/*"
+  ],
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.3"
+  }
 }
