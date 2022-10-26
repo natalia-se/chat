@@ -8,9 +8,8 @@ export interface UserInfo {
 }
 
 const UserInfoSchema = new Schema({
-  username: String,
-  password: String,
-  roles: Array<String>,
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
 });
 
 const UserInfoModel = model<UserInfo>("UserInfo", UserInfoSchema);
