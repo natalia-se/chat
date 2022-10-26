@@ -3,6 +3,7 @@ import { model, Schema } from "mongoose";
 
 const MessageSchema = new Schema({
   text: String,
+  author: String,
   timeStamp: Date,
 });
 
