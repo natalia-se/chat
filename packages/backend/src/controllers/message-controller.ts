@@ -9,17 +9,6 @@ messagesController.get("/", async (req: Request, res: Response<Message[]>) => {
   res.send(await loadMessages());
 });
 
-// messagesController.get(
-//   "/:todoId",
-//   async (req: Request, res: Response<TodoItem>) => {
-//     try {
-//       res.send(await loadItemById(req.params.todoId));
-//     } catch (e) {
-//       res.sendStatus(404);
-//     }
-//   }
-// );
-
 messagesController.post(
   "/",
   async (req: JwtRequest<Message>, res: Response<Message[]>) => {

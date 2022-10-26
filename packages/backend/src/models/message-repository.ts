@@ -12,10 +12,6 @@ export const getAll = async (): Promise<Message[]> => {
   return MessageModel.find({}).exec();
 };
 
-export const get = async (messageId: string): Promise<Message | null> => {
-  return MessageModel.findById(messageId).exec();
-};
-
 export const save = async (message: Message): Promise<void> => {
   const newMessage = new MessageModel(message);
   newMessage.save();
