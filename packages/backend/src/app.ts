@@ -19,11 +19,11 @@ const mongoUrl: string =
 console.log(`MONGOFB_URL: ${mongoUrl}`);
 
 app.post("/register", register);
-app.post("/login", loginUser);
-app.use("/chat", authenticateToken);
+// app.post("/login", loginUser);
+// app.use("/chat", authenticateToken);
 app.use("/chat", messageController);
 
 app.listen(port, async function () {
   await setupMongoDb(mongoUrl);
-  console.log(`App is listening on port ${port}!`);
+  console.log(`🚀🚀🚀🚀🚀 App is listening on port ${port}! 🚀🚀🚀🚀🚀`);
 });
