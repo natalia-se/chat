@@ -24,7 +24,7 @@ export const authenticateToken = (
   res: Response,
   next: NextFunction
 ) => {
-  const token: string | undefined = req.header("authorization")?.split(" ")[1];
+  const token: string | undefined = req.cookies[JWT_COOKIE_NAME];
 
   if (token) {
     try {
@@ -56,8 +56,7 @@ export const loginUser = async (
   const token = jsonwebtoken.sign({ sub: user.username }, secret, {
     expiresIn: "1800s",
   });
-  res.send(token);
-  return res.sendStatus(200);
+  return res.status(200).cookie(JWT_COOKIE_NAME, token).send(token);
 };
 
 function getErrorMessage(error: unknown) {
