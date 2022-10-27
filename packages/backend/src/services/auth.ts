@@ -29,6 +29,7 @@ export const authenticateToken = (
   if (token) {
     try {
       const decoded = jsonwebtoken.verify(token, secret) as TokenPayload;
+
       req.jwt = decoded;
     } catch (err) {
       return res.sendStatus(403); // Bad token!
@@ -46,13 +47,13 @@ export const loginUser = async (
 ) => {
   const credentials = req.body;
 
-  const userInfo = await performUserAuthentication(credentials);
-  if (!userInfo) {
+  const user = await performUserAuthentication(credentials);
+  if (!user) {
     return res.sendStatus(403);
   }
 
   console.log("Got credentials:", credentials);
-  const token = jsonwebtoken.sign({ sub: userInfo.username }, secret, {
+  const token = jsonwebtoken.sign({ sub: user.username }, secret, {
     expiresIn: "1800s",
   });
   res.send(token);
@@ -97,12 +98,9 @@ export const register = async (
 const performUserAuthentication = async (
   credentials: Credentials
 ): Promise<User | null> => {
-  const userInfo = await loadUserByUsername(credentials.username);
-  if (
-    userInfo &&
-    (await bcrypt.compare(credentials.password, userInfo.password))
-  ) {
-    return userInfo;
+  const user = await loadUserByUsername(credentials.username);
+  if (user && (await bcrypt.compare(credentials.password, user.password))) {
+    return user;
   }
   return null;
 };
