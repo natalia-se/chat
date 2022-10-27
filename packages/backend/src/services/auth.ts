@@ -14,6 +14,56 @@ export type TokenPayload = {
   sub: string;
   name: string;
 };
+
+export interface JwtRequest<T> extends Request<T> {
+  jwt?: TokenPayload;
+}
+
+export const authenticateToken = (
+  req: JwtRequest<any>,
+  res: Response,
+  next: NextFunction
+) => {
+  const token: string | undefined = req.header("authorization")?.split(" ")[1];
+
+  if (token) {
+    try {
+      const decoded = jsonwebtoken.verify(token, secret) as TokenPayload;
+      req.jwt = decoded;
+    } catch (err) {
+      return res.sendStatus(403); // Bad token!
+    }
+  } else {
+    return res.sendStatus(401); // No token! Unauthorized!
+  }
+
+  next();
+};
+
+export const loginUser = async (
+  req: JwtRequest<Credentials>,
+  res: Response<string>
+) => {
+  const credentials = req.body;
+
+  const userInfo = await performUserAuthentication(credentials);
+  if (!userInfo) {
+    return res.sendStatus(403);
+  }
+
+  console.log("Got credentials:", credentials);
+  const token = jsonwebtoken.sign({ sub: userInfo.username }, secret, {
+    expiresIn: "1800s",
+  });
+  res.send(token);
+  return res.sendStatus(200);
+};
+
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
+
 export const register = async (
   req: JwtRequest<User>,
   res: Response<User | string>
