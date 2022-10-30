@@ -34,10 +34,12 @@ export const authenticateToken = (
 
       req.jwt = decoded;
     } catch (err) {
-      return res.sendStatus(StatusCodes.FORBIDDEN); // Bad token!
+      return res.status(StatusCodes.FORBIDDEN).json({ msg: "Bad token!" });
     }
   } else {
-    return res.sendStatus(StatusCodes.UNAUTHORIZED); // No token! Unauthorized!
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ msg: "No token! Unauthorized!" });
   }
 
   next();
@@ -51,14 +53,14 @@ export const loginUser = async (
 
   const user = await performUserAuthentication(credentials);
   if (!user) {
-    return res.sendStatus(403);
+    return res.sendStatus(StatusCodes.FORBIDDEN);
   }
 
   console.log("Got credentials:", credentials);
   const token = jsonwebtoken.sign({ sub: user.username }, secret, {
     expiresIn: "1800s",
   });
-  return res.status(200).cookie(JWT_COOKIE_NAME, token).send(token);
+  return res.status(StatusCodes.OK).cookie(JWT_COOKIE_NAME, token).send(token);
 };
 
 function getErrorMessage(error: unknown) {
