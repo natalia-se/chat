@@ -73,24 +73,12 @@ export const register = async (
 
   const user = req.body;
 
-  try {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPass = await bcrypt.hash(user.password, salt);
+  const salt = await bcrypt.genSalt(10);
+  const hashedPass = await bcrypt.hash(user.password, salt);
 
-    const newUser = await saveUser(user.username, user.email, hashedPass);
+  const newUser = await saveUser(user.username, user.email, hashedPass);
 
-    res.status(200).send(newUser);
-  } catch (e) {
-    let err = e as NodeJS.ErrnoException;
-    // console.log("🚨", err.code, "🚨");
-    console.log("🚨", err.message, "🚨");
-
-    if (err.code && err.code == "11000") {
-      res.status(400).json("Duplicate username");
-    } else {
-      res.status(500).json("Internal server error");
-    }
-  }
+  res.status(200).send(newUser);
 };
 
 ///
