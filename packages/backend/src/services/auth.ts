@@ -59,18 +59,10 @@ export const loginUser = async (
   return res.status(StatusCodes.OK).cookie(JWT_COOKIE_NAME, token).send(token);
 };
 
-function getErrorMessage(error: unknown) {
-  if (error instanceof Error) return error.message;
-  return String(error);
-}
-
 export const register = async (
   req: JwtRequest<User>,
   res: Response<User | string>
 ) => {
-  console.log("/register");
-  console.log(req.body);
-
   const user = req.body;
 
   const salt = await bcrypt.genSalt(10);
