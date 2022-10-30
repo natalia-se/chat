@@ -1,9 +1,11 @@
-import { Credentials } from "@chat-app/shared";
 import { NextFunction, Request, Response } from "express";
 import jsonwebtoken from "jsonwebtoken";
+import { Credentials } from "@chat-app/shared";
 import { User } from "@chat-app/shared";
 import { loadUserByUsername, saveUser } from "../models/user-repository";
+
 const bcrypt = require("bcrypt");
+const { StatusCodes } = require("http-status-codes");
 
 const secret: string =
   process.env.TOKEN_SECRET ||
@@ -32,10 +34,10 @@ export const authenticateToken = (
 
       req.jwt = decoded;
     } catch (err) {
-      return res.sendStatus(403); // Bad token!
+      return res.sendStatus(StatusCodes.FORBIDDEN); // Bad token!
     }
   } else {
-    return res.sendStatus(401); // No token! Unauthorized!
+    return res.sendStatus(StatusCodes.UNAUTHORIZED); // No token! Unauthorized!
   }
 
   next();
@@ -78,7 +80,7 @@ export const register = async (
 
   const newUser = await saveUser(user.username, user.email, hashedPass);
 
-  res.status(200).send(newUser);
+  res.status(StatusCodes.OK).send(newUser);
 };
 
 ///
