@@ -3,6 +3,7 @@ import jsonwebtoken from "jsonwebtoken";
 import { Credentials } from "@chat-app/shared";
 import { User } from "@chat-app/shared";
 import { loadUserByUsername, saveUser } from "../models/user-repository";
+import { TokenPayload, JwtRequest } from "../utils/jwt";
 
 const bcrypt = require("bcrypt");
 const { StatusCodes } = require("http-status-codes");
@@ -11,15 +12,6 @@ const secret: string =
   process.env.TOKEN_SECRET ||
   "f9daa8f6d9ec89bd339e1fa53ae744d98e8170d822f2f014ed0a5f49d392059ee1210953f28e1a535e0980c73750cb077b95c8fa3a676bbf2907e86f8dc8b741";
 const JWT_COOKIE_NAME = "jwt";
-
-export type TokenPayload = {
-  sub: string;
-  name: string;
-};
-
-export interface JwtRequest<T> extends Request<T> {
-  jwt?: TokenPayload;
-}
 
 export const authenticateToken = (
   req: JwtRequest<any>,
@@ -57,9 +49,13 @@ export const loginUser = async (
   }
 
   console.log("Got credentials:", credentials);
-  const token = jsonwebtoken.sign({ sub: user.username }, secret, {
-    expiresIn: "1800s",
-  });
+  const token = jsonwebtoken.sign(
+    { id: user._id, name: user.username },
+    secret,
+    {
+      expiresIn: "1800s",
+    }
+  );
   return res.status(StatusCodes.OK).cookie(JWT_COOKIE_NAME, token).send(token);
 };
 
