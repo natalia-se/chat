@@ -1,4 +1,7 @@
-import React from "react";
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 import { Link } from "react-router-dom";
 
 type Props = {
@@ -8,6 +11,28 @@ type Props = {
 };
 
 const Form = (props: Props) => {
+  const [userName, setUserName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
+  const navigate = useNavigate();
+
+  const handleOnClick = async (): Promise<void> => {
+    if (props.isRegister) {
+      if (!userName || !password || !email) {
+        setError("username, email and password are required");
+      }
+      const signupResponse = await axios.post(`/register`, {
+        userName,
+        email,
+        password,
+      });
+      if (signupResponse && signupResponse.status === 200) {
+        navigate("/login");
+      }
+    }
+  };
   return (
     <div className="container mx-auto">
       <div className="flex justify-center px-6 my-12">
@@ -36,6 +61,7 @@ const Form = (props: Props) => {
                     id="name"
                     type="text"
                     placeholder="Name"
+                    onChange={(e) => setUserName(e.target.value)}
                   />
                 </div>
               )}
@@ -51,6 +77,7 @@ const Form = (props: Props) => {
                   id="email"
                   type="email"
                   placeholder="Email"
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="mb-4 md:flex md:justify-between">
@@ -66,6 +93,7 @@ const Form = (props: Props) => {
                     id="password"
                     type="password"
                     placeholder="******************"
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                   <p className="text-xs italic text-red-500">
                     Please choose a password.
@@ -76,6 +104,7 @@ const Form = (props: Props) => {
                 <button
                   className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
                   type="button"
+                  onClick={handleOnClick}
                 >
                   {props.button}
                 </button>
