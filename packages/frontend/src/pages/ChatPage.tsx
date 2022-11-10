@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Message } from "@chat-app/shared";
+import { useNavigate } from "react-router-dom";
 
 axios.defaults.baseURL =
   process.env.REACT_APP_TODO_API || "http://localhost:3001";
@@ -23,7 +24,25 @@ const fetchMessages = async (): Promise<Message[]> => {
 
 const ChatPage = () => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [message, setMessage] = useState<string>("");
   const [error, setError] = useState<string | undefined>();
+
+  const navigate = useNavigate();
+
+  const saveMessage = async (): Promise<void> => {
+    if (message) {
+      const payload = {
+        text: message,
+      };
+      try {
+        const response = await axios.post("/chat", payload);
+        setMessages(response.data);
+        setMessage("");
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
 
   useEffect(() => {
     fetchMessages()
@@ -31,10 +50,11 @@ const ChatPage = () => {
       .catch((error) => {
         setMessages([]);
         setError("Something went wrong when fetching messages...");
+        navigate("/login");
       });
+    // eslint-disable-next-line
   }, []);
 
-  console.log("messages", messages);
   return (
     <div className="flex flex-col flex-auto h-full p-6">
       <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
@@ -67,12 +87,13 @@ const ChatPage = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
+        <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4 sticky bottom-0">
           <div className="flex-grow ml-4">
             <div className="relative w-full">
               <input
                 type="text"
                 className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+                onChange={(e) => setMessage(e.target.value)}
               />
               {/* Add emoji */}
               {/* <button className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
@@ -94,7 +115,10 @@ const ChatPage = () => {
             </div>
           </div>
           <div className="ml-4">
-            <button className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0">
+            <button
+              className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
+              onClick={saveMessage}
+            >
               <span>Send</span>
               <span className="ml-2">
                 <svg
