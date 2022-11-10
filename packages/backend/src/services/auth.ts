@@ -18,7 +18,7 @@ export const authenticateToken = (
   res: Response,
   next: NextFunction
 ) => {
-  const token: string | undefined = req.cookies[JWT_COOKIE_NAME];
+  const token: string | undefined = req.header("Authorization")?.split(" ")[1];
 
   if (token) {
     try {
