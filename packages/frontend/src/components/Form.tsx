@@ -40,7 +40,7 @@ const Form = (props: Props) => {
         password: password,
       });
       if (signinResponse && signinResponse.status === 200) {
-        localStorage.setItem("chat", signinResponse.data);
+        localStorage.setItem("jwt", signinResponse.data);
         navigate("/chat");
       }
     }

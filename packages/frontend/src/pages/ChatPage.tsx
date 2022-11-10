@@ -1,41 +1,25 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-// import { LoginInput } from "./LoginInput";
 import { Message } from "@chat-app/shared";
 
 axios.defaults.baseURL =
   process.env.REACT_APP_TODO_API || "http://localhost:3001";
-// axios.interceptors.request.use((config) => {
-//   if (!config?.headers) {
-//     config.headers = {};
-//   }
-//   const jwt = localStorage.getItem("jwt");
-//   if (jwt) {
-//     config.headers["authorization"] = `Bearer ${jwt}`;
-//   }
-//   return config;
-// });
+
+axios.interceptors.request.use((config) => {
+  if (!config?.headers) {
+    config.headers = {};
+  }
+  const jwt = localStorage.getItem("jwt");
+  if (jwt) {
+    config.headers["authorization"] = `Bearer ${jwt}`;
+  }
+  return config;
+});
 
 const fetchMessages = async (): Promise<Message[]> => {
   const response = await axios.get<Message[]>("/chat");
   return response.data;
 };
-
-// const MessageList = ({ messages, error }: { messages: Message[]; error?: string }) => {
-//   if (error) {
-//     return <div>{error}</div>;
-//   } else if (messages) {
-//     return (
-//       <div>
-//         {messages.map((item) => {
-//           return <p key={item._id}>{item.text}</p>;
-//         })}
-//       </div>
-//     );
-//   } else {
-//     return <div>'Waiting for todos'</div>;
-//   }
-// };
 
 const ChatPage = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -90,7 +74,8 @@ const ChatPage = () => {
                 type="text"
                 className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
               />
-              <button className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
+              {/* Add emoji */}
+              {/* <button className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
                 <svg
                   className="w-6 h-6"
                   fill="none"
@@ -105,7 +90,7 @@ const ChatPage = () => {
                     d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   ></path>
                 </svg>
-              </button>
+              </button> */}
             </div>
           </div>
           <div className="ml-4">
