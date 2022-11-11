@@ -1,3 +1,3 @@
 export type { Credentials } from "./credentials";
-export type { Message } from "./message";
+export type { Message, MessageView } from "./message";
 export type { User } from "./user";
