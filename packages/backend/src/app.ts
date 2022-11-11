@@ -3,7 +3,7 @@ require("express-async-errors");
 import cors from "cors";
 import express, { Application, json } from "express";
 import dotenv from "dotenv";
-import messageController from "./controllers/message-controller";
+import messageRouter from "./routes/message-route";
 import { setupMongoDb } from "./models/db";
 import { authenticateToken, loginUser, register } from "./services/auth";
 import cookieParser from "cookie-parser";
@@ -19,7 +19,7 @@ app.use(json());
 app.post("/register", register);
 app.post("/login", loginUser);
 app.use("/chat", authenticateToken);
-app.use("/chat", messageController);
+app.use("/chat", messageRouter);
 
 // app.use(notFound);
 app.use(errorHandler);
