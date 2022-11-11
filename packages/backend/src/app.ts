@@ -21,7 +21,6 @@ app.post("/login", loginUser);
 app.use("/chat", authenticateToken);
 app.use("/chat", messageRouter);
 
-// app.use(notFound);
 app.use(errorHandler);
 
 const port: number = parseInt(process.env.SERVER_PORT || "3001");
