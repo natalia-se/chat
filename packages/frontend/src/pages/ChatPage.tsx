@@ -45,19 +45,20 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
-    // const interval = setInterval(() => {
-    fetchMessages()
-      .then(setMessages)
-      .catch((error) => {
-        setMessages([]);
-        setError("Something went wrong when fetching messages...");
-        console.log("Error: ", error.message);
-        navigate("/login");
-      });
-    // }, 2000);
+    // TODO: Instead of setInterval use t.ex. Socket.io
+    const interval = setInterval(() => {
+      fetchMessages()
+        .then(setMessages)
+        .catch((error) => {
+          setMessages([]);
+          setError("Something went wrong when fetching messages...");
+          console.log("Error: ", error.message);
+          navigate("/login");
+        });
+    }, 2000);
     window.scrollTo(0, document.body.scrollHeight);
 
-    // return () => clearInterval(interval);
+    return () => clearInterval(interval);
     // eslint-disable-next-line
   }, []);
   if (error) alert(error);
