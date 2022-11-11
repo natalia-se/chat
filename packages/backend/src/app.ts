@@ -6,13 +6,13 @@ import dotenv from "dotenv";
 import messageRouter from "./routes/message-route";
 import { setupMongoDb } from "./models/db";
 import { authenticateToken, loginUser, register } from "./services/auth";
-import cookieParser from "cookie-parser";
+// import cookieParser from "cookie-parser";
 import errorHandler from "./middleware/error-handler";
 
 dotenv.config();
 
 const app: Application = express();
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(cors());
 app.use(json());
 
