@@ -14,7 +14,7 @@ const MessageSchema = new Schema(
 const MessageModel = model<Message>("Message", MessageSchema);
 
 export const getAll = async (): Promise<Message[]> => {
-  return MessageModel.find({}).exec();
+  return MessageModel.find({}).populate("author").exec();
 };
 
 export const save = async (message: Message): Promise<Message> => {
