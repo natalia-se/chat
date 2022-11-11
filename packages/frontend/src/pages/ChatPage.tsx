@@ -45,6 +45,7 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
+    // const interval = setInterval(() => {
     fetchMessages()
       .then(setMessages)
       .catch((error) => {
@@ -53,7 +54,10 @@ const ChatPage = () => {
         console.log("Error: ", error.message);
         navigate("/login");
       });
+    // }, 2000);
     window.scrollTo(0, document.body.scrollHeight);
+
+    // return () => clearInterval(interval);
     // eslint-disable-next-line
   }, []);
   if (error) alert(error);
@@ -78,6 +82,7 @@ const ChatPage = () => {
                     </div>
                   ))}
               </div>
+              {/* TODO: style for owm messages */}
               {/* <div className="col-start-6 col-end-13 p-3 rounded-lg">
                 <div className="flex items-center justify-start flex-row-reverse">
                   <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
@@ -100,7 +105,7 @@ const ChatPage = () => {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
               />
-              {/* Add emoji */}
+              {/* TODO: Add emoji */}
               {/* <button className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
                 <svg
                   className="w-6 h-6"
