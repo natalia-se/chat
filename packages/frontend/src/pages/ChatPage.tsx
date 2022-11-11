@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Message } from "@chat-app/shared";
+import { MessageView } from "@chat-app/shared";
 import { useNavigate } from "react-router-dom";
 
 axios.defaults.baseURL =
@@ -17,13 +17,13 @@ axios.interceptors.request.use((config) => {
   return config;
 });
 
-const fetchMessages = async (): Promise<Message[]> => {
-  const response = await axios.get<Message[]>("/chat");
+const fetchMessages = async (): Promise<MessageView[]> => {
+  const response = await axios.get<MessageView[]>("/chat");
   return response.data;
 };
 
 const ChatPage = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<MessageView[]>([]);
   const [message, setMessage] = useState<string>("");
   const [error, setError] = useState<string | undefined>();
 
@@ -50,10 +50,14 @@ const ChatPage = () => {
       .catch((error) => {
         setMessages([]);
         setError("Something went wrong when fetching messages...");
+        console.log("Error: ", error.message);
         navigate("/login");
       });
+    window.scrollTo(0, document.body.scrollHeight);
     // eslint-disable-next-line
   }, []);
+  if (error) alert(error);
+  window.scrollTo(0, document.body.scrollHeight);
 
   return (
     <div className="flex flex-col flex-auto h-full p-6">
@@ -66,7 +70,7 @@ const ChatPage = () => {
                   messages.map((message, index) => (
                     <div key={index} className="flex flex-row items-center">
                       <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                        {message.author}
+                        {message.author.username.slice(0, 4)}
                       </div>
                       <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
                         <div>{message.text}</div>
@@ -93,6 +97,7 @@ const ChatPage = () => {
               <input
                 type="text"
                 className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+                value={message}
                 onChange={(e) => setMessage(e.target.value)}
               />
               {/* Add emoji */}
