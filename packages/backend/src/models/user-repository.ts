@@ -18,7 +18,7 @@ export const loadUserByUsername = async (
 export const saveUser = async (
   username: string,
   email: string,
-  password: any
+  password: string
 ): Promise<User> => {
   const newUser = new UserModel({
     username,

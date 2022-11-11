@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import jsonwebtoken from "jsonwebtoken";
 import { Credentials } from "@chat-app/shared";
 import { User } from "@chat-app/shared";
@@ -14,11 +14,11 @@ const secret: string =
 const JWT_COOKIE_NAME = "jwt";
 
 export const authenticateToken = (
-  req: JwtRequest<any>,
+  req: JwtRequest<string>,
   res: Response,
   next: NextFunction
 ) => {
-  const token: string | undefined = req.header("Authorization")?.split(" ")[1];
+  const token: string | undefined = extractToken(req);
 
   if (token) {
     try {
@@ -83,3 +83,6 @@ const performUserAuthentication = async (
   }
   return null;
 };
+function extractToken(req: JwtRequest<string>): string | undefined {
+  return req.header("Authorization")?.split(" ")[1];
+}
